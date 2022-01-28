@@ -16,7 +16,7 @@ Both sets of examples are distributed under the MIT license - see disclaimer und
 https://opensource.org/licenses/MIT. The code in this repo is similar - assumption is that
 it can be mined for "how to" approaches, but no warranty as to suitability is given.
 
-##Word about users
+## Word about users
 
 The configs generally work with aws profiles (i.e. setup using aws configure with
 keys and secrets from IAM). The following profiles are expected:
