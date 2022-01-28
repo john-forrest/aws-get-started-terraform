@@ -9,7 +9,7 @@ do that once this has run! The approach is thus:
 - Run terraform init, plan and apply as normal.
 - Record the output (need in further init commands that will use s3 backend)
 - Rename/copy backend.tf.forlater to backend.tf
-- Run: terraform init -backend-config="profile=admin" -backend-config="bucket=S3_BUCKET" -backend-config="region=eu-west-2" -backend-config="dynamodb_table=DYNAMODB_STATELOCK" (substituting S3_BUCKET and DYNAMODB_STATELOCK with the outputs recorded above.
+- Run: terraform init -backend-config="profile=admin" -backend-config="bucket=S3_BUCKET" -backend-config="region=eu-west-2" -backend-config="dynamodb_table=DYNAMODB_STATELOCK" (substituting S3_BUCKET and DYNAMODB_STATELOCK with the outputs recorded above).
 
 From this point, the state data will be in S3. Note there is an argument for adding all those config variables to
 backend.tf so they are consistent.

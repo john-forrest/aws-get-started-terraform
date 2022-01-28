@@ -24,4 +24,9 @@ keys and secrets from IAM). The following profiles are expected:
 - Infra - infrastructure/cloud network engineer
 - Admin - infra plus the ability to create usergroups
 
-These could all be the same user.
+These could all be the same user. Note that some of the configs contain potential lists
+of users, e.g. to set S3 access. These need to be real users. Either edit the lists
+or edit the usergroups that are selected afterwards - generally any access will be
+given to a usergroup and not an individual user, as that makes things easier to update
+if users are added or deleted subsequently.
+
