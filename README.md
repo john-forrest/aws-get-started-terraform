@@ -30,3 +30,9 @@ or edit the usergroups that are selected afterwards - generally any access will 
 given to a usergroup and not an individual user, as that makes things easier to update
 if users are added or deleted subsequently.
 
+## Use of modules
+
+The modules are designed to be used in order:
+- pizza-remote-state - add S3 resources to allow the terraform state data to be held
+in AWS, so removing the problems of local data accidentally being wiped.
+- pizza-config - add S3 bucket to allow some settings to be held centrally

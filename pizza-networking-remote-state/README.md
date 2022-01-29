@@ -1,7 +1,8 @@
-# Pizza Remote State
+# Pizza Networking Remote State
 
-This config is purely to setup a bucket and dynamodb table to hold the central state, so the
-config can be changed from different machines and does not depend on local state.
+This config is purely to setup a bucket and dynamodb table to hold the central state, 
+for networking infrastructure, so the config can be changed from different machines
+and does not depend on local state.
 
 There is a certain amount of "chicken and egg" going on here. We want to store the state
 centrally but we can only do so once the bucket and lock have been created, and can only

@@ -1,0 +1,7 @@
+**/.terraform
+**/*.tfstate
+**/*.tfstate.backup
+# Convention to use .tfplan for output of "terraform plan" commands
+**/*.tfplan
+# specific file we copy across during use but don't want in git to start with
+pizza-networking-remote-state/backend.tf
