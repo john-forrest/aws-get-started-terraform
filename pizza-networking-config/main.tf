@@ -63,91 +63,15 @@ locals {
   bucket_name = "${var.aws_bucket_prefix}-${random_integer.rand.result}"
 }
 
-resource "aws_s3_bucket" "config_bucket" {
-  bucket        = local.bucket_name
-  acl           = "private"
-  force_destroy = true
+module "protected_s3_bucket" {
+  source = "../modules/protected-s3-bucket"
 
-  versioning {
-    enabled = true
-  }
-
+  bucket_name             = local.bucket_name
+  full_access_users       = var.full_access_users
+  read_only_users         = var.read_only_users
+  common_tags             = local.common_tags
 }
 
-resource "aws_iam_group" "bucket_full_access" {
-
-  name = "${local.bucket_name}-full-access"
-
-}
-
-resource "aws_iam_group" "bucket_read_only" {
-
-  name = "${local.bucket_name}-read-only"
-
-}
-
-# Add members to the group
-
-resource "aws_iam_group_membership" "full_access" {
-  name = "${local.bucket_name}-full-access"
-
-  users = var.full_access_users
-
-  group = aws_iam_group.bucket_full_access.name
-}
-
-resource "aws_iam_group_membership" "read_only" {
-  name = "${local.bucket_name}-read-only"
-
-  users = var.read_only_users
-
-  group = aws_iam_group.bucket_read_only.name
-}
-
-resource "aws_iam_group_policy" "full_access" {
-  name  = "${local.bucket_name}-full-access"
-  group = aws_iam_group.bucket_full_access.id
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "s3:*",
-            "Resource": [
-                "arn:aws:s3:::${local.bucket_name}",
-                "arn:aws:s3:::${local.bucket_name}/*"
-            ]
-        }
-   ]
-}
-EOF
-}
-
-resource "aws_iam_group_policy" "read_only" {
-  name  = "${local.bucket_name}-read-only"
-  group = aws_iam_group.bucket_read_only.id
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:Get*",
-                "s3:List*"
-            ],
-            "Resource": [
-                "arn:aws:s3:::${local.bucket_name}",
-                "arn:aws:s3:::${local.bucket_name}/*"
-            ]
-        }
-   ]
-}
-EOF
-}
 
 ##################################################################################
 # Bucket Objects
@@ -155,12 +79,12 @@ EOF
 
 resource "aws_s3_bucket_object" "config_content" {
   for_each = fileset("configs/", "*")
-  bucket   = aws_s3_bucket.config_bucket.bucket
+  bucket   = module.protected_s3_bucket.bucket
   key      = each.value
   source   = "./configs/${each.value}"
 
   tags = merge(local.common_tags, {
-    Name = "${local.name_prefix}-configs-${each.value}"
+    Name = "${local.bucket_name}-configs-${each.value}"
   })
 }
 
@@ -169,5 +93,5 @@ resource "aws_s3_bucket_object" "config_content" {
 ##################################################################################
 
 output "s3_bucket" {
-  value = aws_s3_bucket.config_bucket.bucket
+  value = module.protected_s3_bucket.bucket
 }
