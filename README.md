@@ -30,9 +30,24 @@ or edit the usergroups that are selected afterwards - generally any access will 
 given to a usergroup and not an individual user, as that makes things easier to update
 if users are added or deleted subsequently.
 
-## Use of modules
+## Terraform infrastructure modules
 
-The modules are designed to be used in order:
-- pizza-remote-state - add S3 resources to allow the terraform state data to be held
-in AWS, so removing the problems of local data accidentally being wiped.
-- pizza-config - add S3 bucket to allow some settings to be held centrally
+The following modules support terraform (in that they would probably not be needed
+if were not using terraform as such). They are needed before the work proper, and
+must be "built" in the given order:
+- pizza-networking-remote-state - add S3 resources to allow the terraform state data
+for network modulesto be held in AWS, so removing the problems of local data accidentally
+being wiped.
+- pizza-networking-config - add S3 bucket to allow some settings to be held centrally.
+Again for network/infrastructure.
+- pizza-app-remote-state - similar for pizza-networking-remote-state but for
+application related stuff.
+
+Note: the distinction between intrastructure and applications can be a bit mute
+when it comes to things like security groups. Take taken here is that the vpc,
+subnets etc will be infrastruture. Instances, load balancers, autoscale groups,
+supporting databases and filestores etc are application. For when in doubt,
+things like security groups added to support the vpc/firewall etc would be
+infrastructure. One added related to application instances would typically
+be added as part of the main application config. In real life, different
+organisations might do things differently.
