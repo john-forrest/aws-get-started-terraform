@@ -51,3 +51,7 @@ things like security groups added to support the vpc/firewall etc would be
 infrastructure. One added related to application instances would typically
 be added as part of the main application config. In real life, different
 organisations might do things differently.
+
+Also note that if we start to use workspace, that none of these modules should
+have separate workspaces - if required, files for the separate workspaces would
+be added separately to the default.
