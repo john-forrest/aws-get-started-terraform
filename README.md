@@ -1,5 +1,9 @@
 # aws-get-started-terraform
-Redo some of the examples from pluralsight course "AWS Developer:Getting Started" using terraform
+
+Redo some of the examples from pluralsight course [AWS Developer Getting Started)
+[https://app.pluralsight.com/library/courses/aws-developer-getting-started/table-of-contents]
+but using terraform. It is not designed to be used on its own - the assumption is that
+you will have subscribed to this course.
 
 As an exercise, this repeats some of the demo material from the course mentioned, using
 techniques described in "Implementing Terraform with AWS" plus, to a lesser extent,
@@ -14,7 +18,15 @@ The demos for these courses are all on github, variously:
 Disclaimer: This stuff is a personal exercise to try and use the various techniques. No more.
 Both sets of examples are distributed under the MIT license - see disclaimer under
 https://opensource.org/licenses/MIT. The code in this repo is similar - assumption is that
-it can be mined for "how to" approaches, but no warranty as to suitability is given.
+it can be mined for "how to" approaches, but no warranty as to suitability is given nor
+to the material in the comments.
+
+Having said that, the comments include summaries of the verbal instuctions from the
+[AWS Developer Getting Started)
+[https://app.pluralsight.com/library/courses/aws-developer-getting-started/table-of-contents]
+course itself. The original material will be under copyright as such,
+but the assumption that this amounts to fair use. Whatever, I would encourage you
+to subscribe to the course.
 
 ## Word about users
 
@@ -74,4 +86,5 @@ However, for this case, where we want to track the buildup, it makes perfect
 sense.
 
 The demos:
-- 1-
+- 1-setup-vpc - setup vpc (Module 4, creating VPC demo equivalent)
+- 2-setup-vpc-v2 - Update to 1-setup-vpc with better terraform

@@ -78,10 +78,11 @@ module "protected_s3_bucket" {
 ##################################################################################
 
 resource "aws_s3_bucket_object" "config_content" {
-  for_each = fileset("configs/", "*")
+  for_each = fileset("configs/", "*.json")
   bucket   = module.protected_s3_bucket.bucket
   key      = each.value
   source   = "./configs/${each.value}"
+  content_type = "application/json"
 
   tags = merge(local.common_tags, {
     Name = "${local.bucket_name}-configs-${each.value}"
