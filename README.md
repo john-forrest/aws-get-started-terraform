@@ -52,8 +52,26 @@ infrastructure. One added related to application instances would typically
 be added as part of the main application config. In real life, different
 organisations might do things differently.
 
-Also note that if we start to use workspace, that none of these modules should
+Also note that if we start to use workspace, that none of these configs should
 have separate workspaces - they are all in the category where to support
 workspaces, in other configs, multiple files of the correct name are added
 to the single, default environment.
 
+## Replacement for Pizza Demos
+
+The following are designed to replace the various Pizza demos to as reasonably
+near in terraform. They don't aim to be exact, just near enough. They use what
+the author of the Terraform courses, mentioned above, refers to as a "layered
+approach" - rather than a single project that build everything, several
+Terraform configs generate the various resources on AWS, so can be separately
+build and replaced. 
+
+Also note the various demos use a trick - rather than modify the original
+files, you can have a new version of a configuration in a second directory
+providing they use the same configuration in the backend. You'd not do this
+for a real project, where it makes more sense to save changes "in situ".
+However, for this case, where we want to track the buildup, it makes perfect
+sense.
+
+The demos:
+- 1-
