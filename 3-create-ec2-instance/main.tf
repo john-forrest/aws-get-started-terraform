@@ -172,8 +172,8 @@ resource "aws_security_group" "pizza-ec2-sg" {
   }
 
   tags = merge(local.common_tags, {
-           Name = "pizza-ec2-sg"
-		 })
+    Name = "pizza-ec2-sg"
+  })
 }
 
 resource "aws_security_group" "pizza-ec2-ssh" {
@@ -189,17 +189,20 @@ resource "aws_security_group" "pizza-ec2-ssh" {
   }
 
   tags = merge(local.common_tags, {
-           Name = "pizza-ec2-ssh"
-		 })
+    Name = "pizza-ec2-ssh"
+  })
 }
 
 resource "aws_instance" "pizza-og" {
   ami           = data.aws_ami.aws_linux.id
   instance_type = local.instance_type
   subnet_id     = local.public_subnets[0]
-  vpc_security_group_ids = [aws_security_group.pizza-ec2-sg.id,
-  aws_security_group.pizza-ec2-ssh.id]
-  key_name = var.key_pair
+  vpc_security_group_ids = [
+    aws_security_group.pizza-ec2-sg.id,
+    aws_security_group.pizza-ec2-ssh.id
+  ]
+  key_name                    = var.key_pair
+  associate_public_ip_address = false
 
   tags = merge(local.common_tags, {
     Name = "pizza-og"

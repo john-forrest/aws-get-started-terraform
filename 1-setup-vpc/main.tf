@@ -55,6 +55,8 @@ module "vpc" {
   azs            = slice(data.aws_availability_zones.azs.names, 0, 2)
   public_subnets = var.public_subnets
 
+  map_public_ip_on_launch = false
+
   tags = {
     Environment = "dev"
     Team        = "infra"

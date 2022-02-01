@@ -95,6 +95,8 @@ module "vpc" {
   public_subnets = [for subnet in range(local.vpc_subnet_count) :
   cidrsubnet(local.vpc_cidr_block, local.vpc_subnet_extra_bits, subnet)]
 
+  map_public_ip_on_launch = false
+
   tags = merge(local.common_tags, {
     Environment = "dev"
     Team        = "infra"
