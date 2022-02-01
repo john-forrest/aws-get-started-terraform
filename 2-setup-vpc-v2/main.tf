@@ -43,21 +43,24 @@ provider "aws" {
 data "aws_availability_zones" "azs" {}
 
 data "terraform_remote_state" "network_config" {
+  # Get bucket where we store the netework config
   backend = "s3"
   config = {
     bucket = var.network_remote_state
     key    = "networking/config/terraform.tfstate" # must agree with backend.tf in pizza-networking-config
     region = var.remote_state_region
   }
-  # The bucket with be data.terraform_remote_state.network_config.s3_bucket
+  # The bucket with be data.terraform_remote_state.network_config.outputs.s3_bucket
 }
 
 data "aws_s3_bucket_object" "vpc_config" {
+  # Read pizza-vpc.json from the network config bucket
   bucket = data.terraform_remote_state.network_config.outputs.s3_bucket
   key    = "pizza-vpc.json"
 }
 
 data "aws_s3_bucket_object" "common_tags" {
+  # Read common_tags.json from the network config bucket
   bucket = data.terraform_remote_state.network_config.outputs.s3_bucket
   key    = "common_tags.json"
 }

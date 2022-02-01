@@ -78,10 +78,12 @@ module "protected_s3_bucket" {
 ##################################################################################
 
 resource "aws_s3_bucket_object" "config_content" {
-  for_each = fileset("configs/", "*")
-  bucket   = module.protected_s3_bucket.bucket
-  key      = each.value
-  source   = "./configs/${each.value}"
+  for_each     = fileset("configs/", "*.json")
+  bucket       = module.protected_s3_bucket.bucket
+  key          = each.value
+  source       = "./configs/${each.value}"
+  content_type = "application/json"
+  etag         = filemd5("./configs/${each.value}") # will trigger new version if content update
 
   tags = merge(local.common_tags, {
     Name = "${local.bucket_name}-configs-${each.value}"

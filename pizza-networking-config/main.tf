@@ -66,10 +66,10 @@ locals {
 module "protected_s3_bucket" {
   source = "../modules/protected-s3-bucket"
 
-  bucket_name             = local.bucket_name
-  full_access_users       = var.full_access_users
-  read_only_users         = var.read_only_users
-  common_tags             = local.common_tags
+  bucket_name       = local.bucket_name
+  full_access_users = var.full_access_users
+  read_only_users   = var.read_only_users
+  common_tags       = local.common_tags
 }
 
 
@@ -78,11 +78,13 @@ module "protected_s3_bucket" {
 ##################################################################################
 
 resource "aws_s3_bucket_object" "config_content" {
-  for_each = fileset("configs/", "*.json")
-  bucket   = module.protected_s3_bucket.bucket
-  key      = each.value
-  source   = "./configs/${each.value}"
+  for_each     = fileset("configs/", "*.json")
+  bucket       = module.protected_s3_bucket.bucket
+  key          = each.value
+  source       = "./configs/${each.value}"
   content_type = "application/json"
+  etag         = filemd5("./configs/${each.value}") # will trigger new version if content update
+
 
   tags = merge(local.common_tags, {
     Name = "${local.bucket_name}-configs-${each.value}"

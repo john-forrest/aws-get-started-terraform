@@ -12,7 +12,7 @@ than being "self hosted". That means that it can be added to a remote state tabl
 
 To initialise:
 - terraform init -backend-config="profile=admin" -backend-config="bucket=S3_BUCKET" -backend-config="region=eu-west-2" -backend-config="dynamodb_table=DYNAMODB_STATELOCK" (substituting S3_BUCKET and DYNAMODB_STATELOCK with the outputs
-from the ).
+from the pizza-app-remote-state module).
 - Save the outputs - they will be needed to setup the remote init on any subsequent application config.
 
 As with the network remote state table, these resources and in particular the S3 bucket,

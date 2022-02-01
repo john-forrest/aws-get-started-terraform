@@ -1,7 +1,7 @@
 
 ## 1-Setup-VPC
 
-This equates to the "Creating a VPC demo" in Module 4 of the AWS Developer: Getting Started Course.
+This equates to the "Creating a VPC" demo in Module 4 of the AWS Developer: Getting Started Course.
 
 The summary of the manual instructions in the original:
 - Ensure in correct region
