@@ -105,7 +105,7 @@ data "aws_ami" "aws_linux" {
 
   filter {
     name   = "name"
-    values = ["amzn-ami-hvm-20*"]
+    values = ["amzn2-ami-hvm*"]
   }
 
   filter {
@@ -213,12 +213,10 @@ resource "aws_instance" "pizza-og" {
 # OUTPUTS
 #############################################################################
 
-output "pizza_ec2_sg" {
+output "ec2-sg-id" {
   value = aws_security_group.pizza-ec2-sg.id
 }
 
-output "pizza-og" {
-  value = aws_instance.pizza-og
+output "instance-id" {
+  value = aws_instance.pizza-og.id
 }
-
-
