@@ -1,5 +1,5 @@
 
-## 3-create-elastic-ip
+## 4-create-elastic-ip
 
 This equates to the "Connecting to an EC2 Instance" demo in Module 4 of the AWS Developer: Getting Started Course.
 
