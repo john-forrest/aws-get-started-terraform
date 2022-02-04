@@ -15,8 +15,10 @@ The summary of the manual instructions in the original:
 			- "Associate"
 
 The terraform pulls in the id of the pizza-og instance from the backend state and then
-just creates the Elastic IP to go with it. Note it might have been tempting to add
+just creates the Elastic IP to go with it. Note it might have been tempting to add this
+to the pizza-og config, but that means that if we destroy pizza-og we also destroy the EIP.
 
+To support this we again need:
 
 	export TF_VAR_applications_remote_state=APPLICATIONS_S3_BUCKET
 	export TF_VAR_remote_state_region=REMOTE_STATE_REGION
