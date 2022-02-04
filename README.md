@@ -85,6 +85,15 @@ for a real project, where it makes more sense to save changes "in situ".
 However, for this case, where we want to track the buildup, it makes perfect
 sense.
 
+The terraform is not a complete replacement for manual intervention. The
+course itself is designed on the basis of deploying the app by creating a
+"gold image" that can be deployed. Those steps will still be manual.
+
 The demos:
 - 1-setup-vpc - setup vpc (Module 4, creating VPC demo equivalent)
 - 2-setup-vpc-v2 - Update to 1-setup-vpc with better terraform
+- 3-create-ec2-instance - create first EC2 VM (pizza-og). (Module 4, Creating EC2 Instance)
+- 4-create-elastic-ip - creating EIP to talk to pizza-og instance.
+(Module 4, Connecting to an EC2 Instance)
+- Module 4, Updating and Deploying to an EC2 Instance, is still as the course -
+i.e. done manually.
