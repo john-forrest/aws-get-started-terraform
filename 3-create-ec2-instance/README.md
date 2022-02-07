@@ -41,9 +41,16 @@ APPLICATIONS_S3_BUCKET that from pizza-apps-remote-state, and REMOTE_STATE_REGIO
 the region that module was built with)
 
 Note the use of two security groups - it does not seem to be possible to create
-terraform aws_security_group resources with more than one ingress rule.
+terraform aws_security_group resources with more than one ingress rule. Also note
+the the "pizza" basename for the various entities comes from the application
+configuration.
 
 To initialise:
 
     terraform init -backend-config="profile=app" -backend-config="bucket=${TF_VAR_applications_remote_state}" -backend-config="region=${TF_VAR_remote_state_region}" -backend-config="dynamodb_table=pizza-app-tfstatelock-${TF_VAR_applications_remote_state#pizza-app-tfstate-}"
+
+Warning: be particularly careful about recreating this config once you have (further on)
+allocated this an Elastic IP address and started modifying the contents directly, as
+the course instructs - if terraform decides to recreate the instance, you will have lost
+the manual updates.
 

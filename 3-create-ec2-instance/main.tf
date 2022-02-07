@@ -41,6 +41,11 @@ variable "key_pair" {
   default     = "pizza-keys"
 }
 
+variable "instance_name" {
+  type    = string
+  default = "" # will default to "${basename}-og" or "pizza-og"
+}
+
 #############################################################################
 # PROVIDERS
 #############################################################################
@@ -138,12 +143,18 @@ locals {
 
   imported_instance_type = jsondecode(local.imported_instance_config)["instance_type"]
   imported_port_number   = jsondecode(local.imported_instance_config)["port_number"]
+  imported_basename      = jsondecode(local.imported_instance_config)["basename"]
 
   instance_type = (var.instance_type != "") ? var.instance_type : local.imported_instance_type
   port_number   = (var.port_number != 0) ? var.port_number : local.imported_port_number
 
+  basename                = (local.imported_basename != "") ? local.imported_basename : "pizza"
+  sg_security_group_name  = "${local.basename}-ec2-sg"                                             # pizza-ec2-sg
+  ssh_security_group_name = "${local.basename}-ec2-ssh"                                            # pizza-ec2-ssh
+  instance_name           = (var.instance_name != "") ? var.instance_name : "${local.basename}-og" # usually pizza-og
+
   common_tags = merge(jsondecode(local.imported_common_tags), {
-    "module" : "create-ec2-instance"
+    module = "create-ec2-instance"
   })
 }
 
@@ -152,7 +163,7 @@ locals {
 #############################################################################  
 
 resource "aws_security_group" "pizza-ec2-sg" {
-  name   = "pizza-ec2-sg"
+  name   = local.sg_security_group_name
   vpc_id = local.vpc_id
 
   # HTTP access from anywhere
@@ -172,12 +183,12 @@ resource "aws_security_group" "pizza-ec2-sg" {
   }
 
   tags = merge(local.common_tags, {
-    Name = "pizza-ec2-sg"
+    Name = local.sg_security_group_name
   })
 }
 
 resource "aws_security_group" "pizza-ec2-ssh" {
-  name   = "pizza-ec2-ssh"
+  name   = local.ssh_security_group_name
   vpc_id = local.vpc_id
 
   # HTTP access from anywhere
@@ -189,7 +200,7 @@ resource "aws_security_group" "pizza-ec2-ssh" {
   }
 
   tags = merge(local.common_tags, {
-    Name = "pizza-ec2-ssh"
+    Name = local.ssh_security_group_name
   })
 }
 
@@ -205,7 +216,7 @@ resource "aws_instance" "pizza-og" {
   associate_public_ip_address = false
 
   tags = merge(local.common_tags, {
-    Name = "pizza-og"
+    Name = local.instance_name
   })
 }
 

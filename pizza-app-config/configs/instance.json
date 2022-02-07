@@ -1,4 +1,5 @@
 {
     "instance_type": "t2.micro",
-    "port_number": 3000
+    "port_number": 3000,
+    "basename": "pizza"
 }
