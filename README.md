@@ -95,5 +95,6 @@ The demos:
 - 3-create-ec2-instance - create first EC2 VM (pizza-og). (Module 4, Creating EC2 Instance)
 - 4-create-elastic-ip - creating EIP to talk to pizza-og instance.
 (Module 4, Connecting to an EC2 Instance)
-- Module 4, Updating and Deploying to an EC2 Instance, is still as the course -
+- "Module 4, Updating and Deploying to an EC2 Instance", is still as the course -
 i.e. done manually.
+- 5-create-ami - create AMI based on manually updated pizza-og instance.
