@@ -1,5 +1,7 @@
 
-## 7-create-load-balancer-v2
+## 7-create-load-balancer2
+
+This is further to the previous section 6.
 
 In reality, although the "Create Load Balancer" demo added pizza-og to the target
 group, we don't want it to. Instead we want to create an autoscaling group and use

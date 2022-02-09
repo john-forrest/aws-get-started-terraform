@@ -1,10 +1,10 @@
 
 ## 6-create-load-balancer
 
-This covers a the "Creating a Load Balancer" demos in Module 4 of the AWS Developer:
+This covers a the "Creating a Load Balancer" demo in Module 4 of the AWS Developer:
 Getting Started Course. Note in the course this is part of a series of demos for
 creating the Load Balancer and the subsequent Auto Scaling Group. We are going
-to split them and then extend in the next section.
+to split them and then extend in a following section.
 
 The manual instructions for this in the original (quite long) are as follows
 - Go to EC2 and "Load Balancers" (under Resources on the Dashboard)
