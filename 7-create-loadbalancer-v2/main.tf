@@ -59,7 +59,7 @@ data "terraform_remote_state" "applications_config" {
     key    = "applications/config/terraform.tfstate" # must agree with backend.tf in pizza-applications-config
     region = var.remote_state_region
   }
-  # The bucket with be data.terraform_remote_state.applications_config.outputs.s3_bucket
+  # The bucket will be data.terraform_remote_state.applications_config.outputs.s3_bucket
 }
 
 data "terraform_remote_state" "setup_vpc" {

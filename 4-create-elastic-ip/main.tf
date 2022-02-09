@@ -48,7 +48,7 @@ data "terraform_remote_state" "applications_config" {
     key    = "applications/config/terraform.tfstate" # must agree with backend.tf in pizza-applications-config
     region = var.remote_state_region
   }
-  # The bucket with be data.terraform_remote_state.applications_config.outputs.s3_bucket
+  # The bucket will be data.terraform_remote_state.applications_config.outputs.s3_bucket
 }
 
 data "terraform_remote_state" "pizza-og" {
@@ -59,7 +59,7 @@ data "terraform_remote_state" "pizza-og" {
     key    = "applications/create-pizza-og/terraform.tfstate" # must agree with backend.tf in create-ec2-instance
     region = var.remote_state_region
   }
-  # The id with be data.terraform_remote_state.pizza-og.outputs.instance-id
+  # The id will be data.terraform_remote_state.pizza-og.outputs.instance-id
 }
 
 data "aws_s3_bucket_object" "instance_config" {

@@ -50,7 +50,7 @@ data "terraform_remote_state" "network_config" {
     key    = "networking/config/terraform.tfstate" # must agree with backend.tf in pizza-networking-config
     region = var.remote_state_region
   }
-  # The bucket with be data.terraform_remote_state.network_config.outputs.s3_bucket
+  # The bucket will be data.terraform_remote_state.network_config.outputs.s3_bucket
 }
 
 data "aws_s3_bucket_object" "vpc_config" {
