@@ -1,9 +1,9 @@
 
-## 3-create-ec2-instance
+## 3a-create-security-groups
 
-This equates to the "Creating EC2 Instance" demo in Module 4 of the AWS Developer: Getting Started Course.
+This is the first part of the "Creating EC2 Instance" demo in Module 4 of the AWS Developer: Getting Started Course.
 
-The summary of the manual instructions in the original:
+The summary of the manual instructions in the original (all steps):
 - Go to EC2
 - Select "Launch Instance"
     - Select Amazon 2 HVM image - 64bit x86. (In video, only Kernel 4.14 version was available,
@@ -27,10 +27,19 @@ The summary of the manual instructions in the original:
 		- Create a new key/pair
 		    - Name "pizza-keys"
 		- Select "Launch Instances"
+		
+In terraform, I am splitting this up into separate configs for a simple reason - the security
+groups (including pizza-ec2-sg) are potentially used later on, in other modules. If we have both
+security groups and instance in the same config, we cannot use "terraform destroy" to destroy
+the instance without the security groups too.
 
-The terraform seeks to do this to a reasonable extent. As with the last vpc setup, much of
-the stuff comes from the config files, and the vpc and subnet ids come from the vpc backend
-state on S3. For this reason, we need to both network and application remote state:
+The terraform seeks to do this to a reasonable extent. Note the use of two security groups - it does not seem to be possible to create terraform aws_security_group resources with more than one ingress rule.
+Also note the the "pizza" basename for the various entities comes from the application
+configuration.
+
+As with the last vpc setup, much of the stuff comes from the config files, and the vpc
+and subnet ids come from the vpc backend state on S3. For this reason, we need to both
+network and application remote state:
 
     export TF_VAR_network_remote_state=NETWORKS3_BUCKET
 	export TF_VAR_applications_remote_state=APPLICATIONS_S3_BUCKET
@@ -40,17 +49,6 @@ state on S3. For this reason, we need to both network and application remote sta
 APPLICATIONS_S3_BUCKET that from pizza-apps-remote-state, and REMOTE_STATE_REGION
 the region that module was built with)
 
-Note the use of two security groups - it does not seem to be possible to create
-terraform aws_security_group resources with more than one ingress rule. Also note
-the the "pizza" basename for the various entities comes from the application
-configuration.
-
 To initialise:
 
     terraform init -backend-config="profile=app" -backend-config="bucket=${TF_VAR_applications_remote_state}" -backend-config="region=${TF_VAR_remote_state_region}" -backend-config="dynamodb_table=pizza-app-tfstatelock-${TF_VAR_applications_remote_state#pizza-app-tfstate-}"
-
-Warning: be particularly careful about recreating this config once you have (further on)
-allocated this an Elastic IP address and started modifying the contents directly, as
-the course instructs - if terraform decides to recreate the instance, you will have lost
-the manual updates.
-

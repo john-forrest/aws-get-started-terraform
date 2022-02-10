@@ -23,27 +23,10 @@ variable "remote_state_region" {
   default     = "us-east-1"
 }
 
-variable "instance_type" {
-  type        = string
-  description = "Instance-type to use for EC2 - default typically t2.micro but comes from config file"
-  default     = ""
-}
-
 variable "port_number" {
   type        = number
   description = "Port number of application - default typically 3000 but comes from config file"
   default     = 0
-}
-
-variable "key_pair" {
-  type        = string
-  description = "EC2 key pair to use for ssh"
-  default     = "pizza-keys"
-}
-
-variable "instance_name" {
-  type    = string
-  default = "" # will default to "${basename}-og" or "pizza-og"
 }
 
 #############################################################################
@@ -104,32 +87,6 @@ data "aws_s3_bucket_object" "common_tags" {
   key    = "common_tags.json"
 }
 
-data "aws_ami" "aws_linux" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm*"]
-  }
-
-  filter {
-    name   = "architecture"
-    values = ["x86_64"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
-  # image id is data.aws_ami.aws_linux.id
-}
-
 #############################################################################
 # LOCALS
 #############################################################################
@@ -141,20 +98,17 @@ locals {
   imported_instance_config = data.aws_s3_bucket_object.instance_config.body
   imported_common_tags     = data.aws_s3_bucket_object.common_tags.body
 
-  imported_instance_type = jsondecode(local.imported_instance_config)["instance_type"]
-  imported_port_number   = jsondecode(local.imported_instance_config)["port_number"]
-  imported_basename      = jsondecode(local.imported_instance_config)["basename"]
+  imported_port_number = jsondecode(local.imported_instance_config)["port_number"]
+  imported_basename    = jsondecode(local.imported_instance_config)["basename"]
 
-  instance_type = (var.instance_type != "") ? var.instance_type : local.imported_instance_type
-  port_number   = (var.port_number != 0) ? var.port_number : local.imported_port_number
+  port_number = (var.port_number != 0) ? var.port_number : local.imported_port_number
 
   basename                = (local.imported_basename != "") ? local.imported_basename : "pizza"
-  sg_security_group_name  = "${local.basename}-ec2-sg"                                             # pizza-ec2-sg
-  ssh_security_group_name = "${local.basename}-ec2-ssh"                                            # pizza-ec2-ssh
-  instance_name           = (var.instance_name != "") ? var.instance_name : "${local.basename}-og" # usually pizza-og
+  sg_security_group_name  = "${local.basename}-ec2-sg"  # pizza-ec2-sg
+  ssh_security_group_name = "${local.basename}-ec2-ssh" # pizza-ec2-ssh
 
   common_tags = merge(jsondecode(local.imported_common_tags), {
-    module = "create-ec2-instance"
+    module = "create-security-groups"
   })
 }
 
@@ -204,22 +158,6 @@ resource "aws_security_group" "pizza-ec2-ssh" {
   })
 }
 
-resource "aws_instance" "pizza-og" {
-  ami           = data.aws_ami.aws_linux.id
-  instance_type = local.instance_type
-  subnet_id     = local.public_subnets[0]
-  vpc_security_group_ids = [
-    aws_security_group.pizza-ec2-sg.id,
-    aws_security_group.pizza-ec2-ssh.id
-  ]
-  key_name                    = var.key_pair
-  associate_public_ip_address = false
-
-  tags = merge(local.common_tags, {
-    Name = local.instance_name
-  })
-}
-
 #############################################################################
 # OUTPUTS
 #############################################################################
@@ -228,6 +166,13 @@ output "ec2-sg-id" {
   value = aws_security_group.pizza-ec2-sg.id
 }
 
-output "instance-id" {
-  value = aws_instance.pizza-og.id
+output "ec2-ssh-id" {
+  value = aws_security_group.pizza-ec2-ssh.id
 }
+
+output "ec2-sg-ids" {
+  value = [aws_security_group.pizza-ec2-sg.id,
+  aws_security_group.pizza-ec2-ssh.id]
+}
+
+
