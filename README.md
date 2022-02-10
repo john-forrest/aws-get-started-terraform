@@ -47,13 +47,14 @@ if users are added or deleted subsequently.
 The following modules support terraform (in that they would probably not be needed
 if were not using terraform as such). They are needed before the work proper, and
 must be "built" in the given order:
-- pizza-networking-remote-state - add S3 resources to allow the terraform state data
+- 0a-pizza-networking-remote-state - add S3 resources to allow the terraform state data
 for network modulesto be held in AWS, so removing the problems of local data accidentally
 being wiped.
-- pizza-networking-config - add S3 bucket to allow some settings to be held centrally.
+- 0b-pizza-networking-config - add S3 bucket to allow some settings to be held centrally.
 Again for network/infrastructure.
-- pizza-app-remote-state - similar for pizza-networking-remote-state but for
+- 0c-pizza-app-remote-state - similar for pizza-networking-remote-state but for
 application related stuff.
+- 0d-pizza-app-config - configurations for application related stuff.
 
 Note: the distinction between intrastructure and applications can be a bit mute
 when it comes to things like security groups. Take taken here is that the vpc,

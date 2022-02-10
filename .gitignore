@@ -4,7 +4,7 @@
 # Convention to use .tfplan for output of "terraform plan" commands
 **/*.tfplan
 # specific file we copy across during use but don't want in git to start with
-pizza-networking-remote-state/backend.tf
+0a-pizza-networking-remote-state/backend.tf
 # Normally we'd add terraform lock files to SCM, but for this project we don't
 # so we can conceptually go through as if from scratch
 **/.terraform.lock.hcl
