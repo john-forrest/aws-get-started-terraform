@@ -10,6 +10,7 @@ export AWS_PROFILE=app
 
 The assumption is that the pizza-networking-remote-state has already been setup, so the
 init can be set as:
-- terraform init -backend-config="profile=app" -backend-config="bucket=S3_BUCKET" -backend-config="region=eu-west-2" -backend-config="dynamodb_table=DYNAMODB_STATELOCK" (substituting S3_BUCKET and DYNAMODB_STATELOCK with the outputs
+
+    terraform init -backend-config="profile=app" -backend-config="bucket=S3_BUCKET" -backend-config="region=eu-west-2" -backend-config="dynamodb_table=DYNAMODB_STATELOCK" (substituting S3_BUCKET and DYNAMODB_STATELOCK with the outputs
 from pizza-app-remote-state).
 

@@ -1,5 +1,5 @@
 
-## 3-create-ec2-instance
+## 3b-create-ec2-instance
 
 This equates part 2 of "Creating EC2 Instance" demo in Module 4 of the AWS Developer: Getting Started Course,
 the part that actually creates the instance. 
@@ -27,8 +27,11 @@ To initialise:
 
     terraform init -backend-config="profile=app" -backend-config="bucket=${TF_VAR_applications_remote_state}" -backend-config="region=${TF_VAR_remote_state_region}" -backend-config="dynamodb_table=pizza-app-tfstatelock-${TF_VAR_applications_remote_state#pizza-app-tfstate-}"
 
-Warning: be particularly careful about recreating this config once you have (further on)
-allocated this an Elastic IP address and started modifying the contents directly, as
-the course instructs - if terraform decides to recreate the instance, you will have lost
-the manual updates.
+Warning: if you allocate a public IP to this instance going forward (e.g. see next config
+"4-create-elastic-ip"), then the natural tendency of terraform rerunning this config is
+to destroy the instance and recreate - it sees the image as changed. The special lifecycle
+clause is to stop this happening. Similarly if there is a new version of the AMI - we
+could take it, but it would throw away the mods we've made and is generally not the thing
+to do without thought we've saved anything. If you do want to recreate this, use:
 
+    terraform taint aws_instance.pizza-og

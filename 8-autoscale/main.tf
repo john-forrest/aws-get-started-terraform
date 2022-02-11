@@ -100,10 +100,10 @@ data "terraform_remote_state" "load-balancer" {
   # target group arns will be data.terraform_remote_state.load-balancer.outputs.pizza-loader-tg-arns
 }
 
-data "aws_s3_bucket_object" "instance_config" {
-  # Read instance.json from the applications config bucket
+data "aws_s3_bucket_object" "app_config" {
+  # Read config.json from the applications config bucket
   bucket = data.terraform_remote_state.applications_config.outputs.s3_bucket
-  key    = "instance.json"
+  key    = "config.json"
 }
 
 data "aws_s3_bucket_object" "common_tags" {
@@ -122,9 +122,9 @@ locals {
   target_group_arns = data.terraform_remote_state.load-balancer.outputs.pizza-loader-tg-arns
   image-id          = data.terraform_remote_state.pizza-ami.outputs.pizza-image-id
 
-  imported_instance_config = data.aws_s3_bucket_object.instance_config.body
-  imported_common_tags     = data.aws_s3_bucket_object.common_tags.body
-  imported_basename        = jsondecode(local.imported_instance_config)["basename"]
+  imported_app_config  = jsondecode(data.aws_s3_bucket_object.app_config.body)
+  imported_common_tags = data.aws_s3_bucket_object.common_tags.body
+  imported_basename    = local.imported_app_config.basename
 
   basename = (local.imported_basename != "") ? local.imported_basename : "pizza"
 

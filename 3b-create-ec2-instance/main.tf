@@ -29,12 +29,6 @@ variable "instance_type" {
   default     = ""
 }
 
-variable "port_number" {
-  type        = number
-  description = "Port number of application - default typically 3000 but comes from config file"
-  default     = 0
-}
-
 variable "key_pair" {
   type        = string
   description = "EC2 key pair to use for ssh"
@@ -104,10 +98,10 @@ data "terraform_remote_state" "create-security-groups" {
   # pizza-ec2-ssh will be data.terraform_remote_state.create-security-groups.outputs.ec2-ssh-id
 }
 
-data "aws_s3_bucket_object" "instance_config" {
-  # Read instance.json from the applications config bucket
+data "aws_s3_bucket_object" "app_config" {
+  # Read config.json from the applications config bucket
   bucket = data.terraform_remote_state.applications_config.outputs.s3_bucket
-  key    = "instance.json"
+  key    = "config.json"
 }
 
 data "aws_s3_bucket_object" "common_tags" {
@@ -153,15 +147,13 @@ locals {
   pizza-ec2-sg     = data.terraform_remote_state.create-security-groups.outputs.ec2-sg-id
   pizza-ec2-ssh-sg = data.terraform_remote_state.create-security-groups.outputs.ec2-ssh-id
 
-  imported_instance_config = data.aws_s3_bucket_object.instance_config.body
-  imported_common_tags     = data.aws_s3_bucket_object.common_tags.body
+  imported_app_config  = jsondecode(data.aws_s3_bucket_object.app_config.body)
+  imported_common_tags = data.aws_s3_bucket_object.common_tags.body
 
-  imported_instance_type = jsondecode(local.imported_instance_config)["instance_type"]
-  imported_port_number   = jsondecode(local.imported_instance_config)["port_number"]
-  imported_basename      = jsondecode(local.imported_instance_config)["basename"]
+  imported_instance_type = local.imported_app_config.og_instance.instance_type
+  imported_basename      = local.imported_app_config.basename
 
   instance_type = (var.instance_type != "") ? var.instance_type : local.imported_instance_type
-  port_number   = (var.port_number != 0) ? var.port_number : local.imported_port_number
 
   basename                = (local.imported_basename != "") ? local.imported_basename : "pizza"
   sg_security_group_name  = "${local.basename}-ec2-sg"                                             # pizza-ec2-sg
@@ -191,6 +183,14 @@ resource "aws_instance" "pizza-og" {
   tags = merge(local.common_tags, {
     Name = local.instance_name
   })
+
+  lifecycle {
+    ignore_changes = [
+      public_ip,                   # don't recreate just because we might have subsequently made publicly visible
+      associate_public_ip_address, # ditto
+      ami                          # don't recreate automatically if there is a new "latest ami"
+    ]
+  }
 }
 
 #############################################################################

@@ -60,7 +60,7 @@ module "vpc" {
   tags = {
     Environment = "dev"
     Team        = "infra"
-	# Name        = "pizza-vpc" # make compat with self.name
+    # Name        = "pizza-vpc" # make compat with self.name
   }
 
 }

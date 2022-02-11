@@ -1,0 +1,7 @@
+{
+	"basename" : "pizza",
+	"instance_port_number": 3000,
+	"og_instance": {
+		"instance_type": "t2.micro"
+	}
+}

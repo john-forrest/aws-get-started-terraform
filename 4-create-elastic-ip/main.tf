@@ -62,10 +62,10 @@ data "terraform_remote_state" "pizza-og" {
   # The id will be data.terraform_remote_state.pizza-og.outputs.instance-id
 }
 
-data "aws_s3_bucket_object" "instance_config" {
-  # Read instance.json from the applications config bucket
+data "aws_s3_bucket_object" "app_config" {
+  # Read config.json from the applications config bucket
   bucket = data.terraform_remote_state.applications_config.outputs.s3_bucket
-  key    = "instance.json"
+  key    = "config.json"
 }
 
 data "aws_s3_bucket_object" "common_tags" {
@@ -80,14 +80,14 @@ data "aws_s3_bucket_object" "common_tags" {
 
 locals {
   imported-pizza-og-id = data.terraform_remote_state.pizza-og.outputs.instance-id
-  
-  imported_instance_config = data.aws_s3_bucket_object.instance_config.body
-  imported_common_tags     = data.aws_s3_bucket_object.common_tags.body
 
-  imported_basename      = jsondecode(local.imported_instance_config)["basename"]
+  imported_app_config  = jsondecode(data.aws_s3_bucket_object.app_config.body)
+  imported_common_tags = data.aws_s3_bucket_object.common_tags.body
 
-  basename                = (local.imported_basename != "") ? local.imported_basename : "pizza"
-  eip_name                = "${local.basename}-og-eip"
+  imported_basename = local.imported_app_config.basename
+
+  basename = (local.imported_basename != "") ? local.imported_basename : "pizza"
+  eip_name = "${local.basename}-og-eip"
 
   common_tags = merge(jsondecode(local.imported_common_tags), {
     module = "create-elastic-ip"

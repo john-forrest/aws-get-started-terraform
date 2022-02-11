@@ -84,10 +84,10 @@ data "terraform_remote_state" "pizza-og" {
   # The id will be data.terraform_remote_state.pizza-og.outputs.instance-id
 }
 
-data "aws_s3_bucket_object" "instance_config" {
-  # Read instance.json from the applications config bucket
+data "aws_s3_bucket_object" "app_config" {
+  # Read config.json from the applications config bucket
   bucket = data.terraform_remote_state.applications_config.outputs.s3_bucket
-  key    = "instance.json"
+  key    = "config.json"
 }
 
 data "aws_s3_bucket_object" "common_tags" {
@@ -105,11 +105,11 @@ locals {
   vpc_id         = data.terraform_remote_state.setup_vpc.outputs.vpc_id
   pizza-og-id    = data.terraform_remote_state.pizza-og.outputs.instance-id
 
-  imported_instance_config = data.aws_s3_bucket_object.instance_config.body
-  imported_common_tags     = data.aws_s3_bucket_object.common_tags.body
+  imported_app_config  = jsondecode(data.aws_s3_bucket_object.app_config.body)
+  imported_common_tags = data.aws_s3_bucket_object.common_tags.body
 
-  imported_port_number = jsondecode(local.imported_instance_config)["port_number"]
-  imported_basename    = jsondecode(local.imported_instance_config)["basename"]
+  imported_port_number = local.imported_app_config.instance_port_number
+  imported_basename    = local.imported_app_config.basename
 
   port_number = (var.port_number != 0) ? var.port_number : local.imported_port_number
 
