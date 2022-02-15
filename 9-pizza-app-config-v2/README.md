@@ -8,6 +8,8 @@ Alternatives would be to use yet another configuration file, or perhaps even cle
 another bucket. The advantage of the latter is, for real, different teams could control these
 files, but for this exercise it is not worth the hassle.
 
+Extend pattern so can be overriden by local variables if we want.
+
 This config is purely to setup a bucket to hold central config values for the applications
 side of this project.
 
