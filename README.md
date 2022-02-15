@@ -99,3 +99,11 @@ The demos:
 - "Module 4, Updating and Deploying to an EC2 Instance", is still as the course -
 i.e. done manually.
 - 5-create-ami - create AMI based on manually updated pizza-og instance.
+- 6-create-loadbalancer - Follow the demo to create the autobalancer that uses
+pizza-og as the backend (no autoscaler)
+- 7-create-loadbalancer-v2 - Update without using pizza-og - setup to allow
+for autoscaler to be plugged in.
+- 8-autoscale - Autoscaler demo
+- 9-pizza-app-config-v2 - updated application config with autoscaler parameters added.
+- 10-autoscale-v2 - updated autoscale config that users application config.json
+
