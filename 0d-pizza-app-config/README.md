@@ -1,4 +1,4 @@
-# Pizza Network Config
+# Pizza App Config
 
 This config is purely to setup a bucket to hold central config values for the applications
 side of this project.

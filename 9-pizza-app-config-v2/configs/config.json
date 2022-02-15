@@ -1,0 +1,13 @@
+{
+	"basename" : "pizza",
+	"instance_port_number": 3000,
+	"og_instance": {
+		"instance_type": "t2.micro"
+	},
+	"autoscale": {
+		"instance_type": "t2.micro",
+		"desired_capacity": 2,
+	    "max_size": 4,
+		"min_size": 2
+	}
+}
