@@ -107,3 +107,10 @@ for autoscaler to be plugged in.
 - 9-pizza-app-config-v2 - updated application config with autoscaler parameters added.
 - 10-autoscale-v2 - updated autoscale config that users application config.json
 
+## Notes
+
+- During the development of this, the latest version of the AWS resources
+went from v3.x to v4.x with somewhat different parameters. I have kept this
+so far on v3.x. The following is useful in trying to look at the appropriate
+[documenttion](https://registry.terraform.io/providers/hashicorp/aws/3.74.2/docs)
+- by default, the terraform documentation just shows the latest.
