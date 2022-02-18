@@ -8,3 +8,6 @@
 # Normally we'd add terraform lock files to SCM, but for this project we don't
 # so we can conceptually go through as if from scratch
 **/.terraform.lock.hcl
+# The "content" directory is to be copied from the pizza-luvrs repo
+# and not saved here
+*/content/**

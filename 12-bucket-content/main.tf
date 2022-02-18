@@ -1,6 +1,6 @@
-#############################################################################
+##################################################################################
 # VARIABLES
-#############################################################################
+##################################################################################
 
 variable "region" {
   type    = string
@@ -29,9 +29,9 @@ variable "basename" {
   default     = ""
 }
 
-#############################################################################
+##################################################################################
 # PROVIDERS
-#############################################################################
+##################################################################################
 
 terraform {
   required_providers {
@@ -62,6 +62,18 @@ data "terraform_remote_state" "applications_config" {
   # The bucket will be data.terraform_remote_state.applications_config.outputs.s3_bucket
 }
 
+data "terraform_remote_state" "content-bucket" {
+  # Get the bucket id
+  backend = "s3"
+  config = {
+    bucket = var.applications_remote_state
+    key    = "applications/create-bucket/terraform.tfstate" # must agree with backend.tf in create-bucket
+    region = var.remote_state_region
+  }
+  # bucket will be data.terraform_remote_state.content-bucket.outputs.bucket
+  # bucket_name will be data.terraform_remote_state.content-bucket.outputs.bucket_name
+}
+
 data "aws_s3_bucket_object" "app_config" {
   # Read config.json from the applications config bucket
   bucket = data.terraform_remote_state.applications_config.outputs.s3_bucket
@@ -74,73 +86,50 @@ data "aws_s3_bucket_object" "common_tags" {
   key    = "common_tags.json"
 }
 
-#############################################################################
+##################################################################################
 # LOCALS
-#############################################################################
+##################################################################################
 
 locals {
+  content_bucket = data.terraform_remote_state.content-bucket.outputs.bucket
+  content_bucket_name = data.terraform_remote_state.content-bucket.outputs.bucket_name
+
   imported_app_config       = jsondecode(data.aws_s3_bucket_object.app_config.body)
   imported_common_tags      = data.aws_s3_bucket_object.common_tags.body
   imported_basename         = local.imported_app_config.basename
 
   basename         = (var.basename != "") ? var.basename : local.imported_basename
 
-  bucket_name_prefix     = "${local.basename}-luvrs"
-
   common_tags = merge(jsondecode(local.imported_common_tags), {
-    module = "create-bucket"
+    module = "bucket-content"
   })
 }
 
-#############################################################################
+##################################################################################
 # RESOURCES
-#############################################################################
+##################################################################################
 
-resource "random_integer" "rand" {
-  min = 10000
-  max = 99999
+
+resource "aws_s3_bucket_object" "config_content" {
+  for_each     = fileset("content/", "**")
+  bucket       = local.content_bucket
+  key          = each.value
+  source       = "./content/${each.value}"
+  # work out mimetype by matching suffix
+  content_type = ((substr(each.value, -4, -1) == ".png") ? "image/png" : 
+                  (substr(each.value, -3, -1) == ".js") ? "text/javascript" :
+                  (substr(each.value, -5, -1) == ".json") ? "application/json" :
+                  (substr(each.value, -4, -1) == ".css") ? "text/css" :
+                  "binary/octet-stream")
+  etag         = filemd5("./content/${each.value}") # will trigger new version if content update
+
+  tags = merge(local.common_tags, {
+    Name = "${local.content_bucket_name}-content-${each.value}"
+  })
 }
 
-locals {
-  bucket_name = "${local.bucket_name_prefix}-${random_integer.rand.result}"
-}
+##################################################################################
+# OUTPUT
+##################################################################################
 
-resource "aws_s3_bucket" "pizza-luvrs" {
-  bucket        = local.bucket_name
-  acl           = "public-read"
-  force_destroy = true
-  
-  # allow public read access to objects
-  policy = <<EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Sid": "",
-        "Action": [
-          "s3:GetObject"
-        ],
-        "Effect": "Allow",
-        "Resource": "arn:aws:s3:::pizza-luvrs-45770/*",
-        "Principal": "*"
-      }
-    ]
-  }
-EOF
 
-  tags = merge(local.common_tags,
-           {name = local.bucket_name
-		 })
-}
-
-#############################################################################
-# OUTPUTS
-#############################################################################
-
-output "bucket" {
-  value = aws_s3_bucket.pizza-luvrs.bucket
-}
-
-output "bucket_name" {
-  value = local.bucket_name
-}

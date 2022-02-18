@@ -50,5 +50,5 @@ To initialise:
 
     terraform init -backend-config="profile=app" -backend-config="bucket=${TF_VAR_applications_remote_state}" -backend-config="region=${TF_VAR_remote_state_region}" -backend-config="dynamodb_table=pizza-app-tfstatelock-${TF_VAR_applications_remote_state#pizza-app-tfstate-}"
 
-Note: this version cheats somewhat by using the "public-read" acl setting instead of a custom
-policy.
+Note: seems that the  "public-read" acl setting confusingly just sets the bucket
+access rights and not the content - thus why the extra policy is still required.
