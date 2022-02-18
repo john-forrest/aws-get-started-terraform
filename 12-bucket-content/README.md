@@ -5,12 +5,13 @@ Getting Started Course.
 
 The basic instructions here are to copy assets/js, assets/css and assets/pizza to
 js, css and pizza directories at the top of the bucket. In the video, this is done
-using the aws cli. Also assets/toppings is uploaded via the web UI. Those options
-always available. However this config loads the content via terraform instead.
+using the aws cli. Also assets/toppings and some extra files are uploaded via the
+web UI. Those options always available. However this config loads the content via
+terraform instead.
 
-To use this, create a directory "content" in this directory and then copy the above
-directories from pizza-luvrs to form content/js, content/css, content/pizza and
-content/toppings.
+To use this, create a directory "content" in this directory and then copy all the
+content of "assets" in the original source to that directory (so we have content/js,
+content/css etc).
 
 To support this we again need:
 

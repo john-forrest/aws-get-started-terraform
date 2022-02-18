@@ -128,6 +128,15 @@ resource "aws_s3_bucket" "pizza-luvrs" {
   }
 EOF
 
+  # Allow cross-origin resource sharing since will be a different domain
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET"]
+    allowed_origins = ["*"]
+    expose_headers  = ["Authorization"]
+    max_age_seconds = 3000
+  }
+
   tags = merge(local.common_tags,
            {name = local.bucket_name
 		 })

@@ -31,6 +31,20 @@ The manual instructions for this are:
 Note that the bucket does not have versioning nor encryption enabled - for real you
 might want to do the former, but there is no need for the latter.
 
+There is a further stage in the later "Working with CORS in S3" which is easier to
+enable here rather than having a V2 version of this module. The requirement is to
+type the following into the CORS field:
+
+    [
+	    {
+		    "AllowedHeaders": [ "*" ],
+			"AllowedMethods": [ "GET" ],
+			"AllowedOrigins": [ "*" ],
+			"ExposeHeaders": [ "Authorization" ],
+			"MaxAgeSeconds": 3000
+		}
+	]
+
 We've obviously been using buckets up to this point for backend and configuration holding,
 and have been using a common module. For this usecase, however, it seems worth rolling
 from basic resources - apart from there being buckets, the configuration is somewhat

@@ -120,6 +120,8 @@ resource "aws_s3_bucket_object" "config_content" {
                   (substr(each.value, -3, -1) == ".js") ? "text/javascript" :
                   (substr(each.value, -5, -1) == ".json") ? "application/json" :
                   (substr(each.value, -4, -1) == ".css") ? "text/css" :
+                  (each.value == "favicon.ico") ? "image/x-image" : # favicons are special cases
+                  (substr(each.value, -4, -1) == ".ico") ? "image/vnd.microsoft.icon" :
                   "binary/octet-stream")
   etag         = filemd5("./content/${each.value}") # will trigger new version if content update
 
