@@ -58,7 +58,6 @@ variable "ami-id" {
   description = "Id of AMI to use - default is to use that from create-ami"
   default     = ""
 }
-
 #############################################################################
 # PROVIDERS
 #############################################################################
@@ -136,6 +135,17 @@ data "terraform_remote_state" "load-balancer" {
   # target group arns will be data.terraform_remote_state.load-balancer.outputs.pizza-loader-tg-arns
 }
 
+data "terraform_remote_state" "ec2-role" {
+  # Get the role/profile from ec2-role
+  backend = "s3"
+  config = {
+    bucket = var.applications_remote_state
+    key    = "applications/ec2-role/terraform.tfstate" # must agree with backend.tf in ec2-role
+    region = var.remote_state_region
+  }
+  # pizza-ec2-role profile name will be data.terraform_remote_state.ec2-role.outputs.pizza-ec2-role-profile-name
+}
+
 data "aws_s3_bucket_object" "app_config" {
   # Read config.json from the applications config bucket
   bucket = data.terraform_remote_state.applications_config.outputs.s3_bucket
@@ -156,6 +166,8 @@ locals {
   public_subnets    = data.terraform_remote_state.setup_vpc.outputs.public_subnets
   pizza-ec2-sg-id   = data.terraform_remote_state.pizza-og.outputs.ec2-sg-id
   target_group_arns = data.terraform_remote_state.load-balancer.outputs.pizza-loader-tg-arns
+  pizza-ec2-role-profile-name = data.terraform_remote_state.ec2-role.outputs.pizza-ec2-role-profile-name
+  pizza-ec2-role-profile-arn = data.terraform_remote_state.ec2-role.outputs.pizza-ec2-role-profile-arn
 
   imported-image-id         = data.terraform_remote_state.pizza-ami.outputs.pizza-image-id
   imported_app_config       = jsondecode(data.aws_s3_bucket_object.app_config.body)
@@ -198,6 +210,10 @@ resource "aws_launch_template" "pizza-lt" {
     security_groups = [local.pizza-ec2-sg-id] # "pizza-ec2-sg"
   }
 
+  iam_instance_profile {
+    arn = local.pizza-ec2-role-profile-arn
+  }
+
   user_data = base64encode(<<EOF
 #!/bin/bash
 echo "starting pizza-luvrs"
@@ -234,8 +250,22 @@ resource "aws_autoscaling_group" "pizza-asg" {
   max_size         = local.max_size
   min_size         = local.min_size
 
+  # tag and instance_refresh will refresh the instance with the new version
+  tag {
+    key                 = "AsgName"
+    value               = local.asg_name
+    propagate_at_launch = true
+  }
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+    triggers = ["tag"]
+  }
+
   # tag/tags for this resource has a special feature and is not the same as
-  # other aws resources. Best leave unset.
+  # other aws resources.
 }
 
 resource "aws_autoscaling_policy" "pizza-asg-pol" {

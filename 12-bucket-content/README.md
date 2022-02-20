@@ -13,6 +13,11 @@ To use this, create a directory "content" in this directory and then copy all th
 content of "assets" in the original source to that directory (so we have content/js,
 content/css etc).
 
+If you are working on Windows, since the target is Linux, you might want to change
+the line endings for the *.js and *.css files to be newline - Linux-style. Not as
+such required - we've already used those files "as is" up to this point, but it
+would be more consistent.
+
 To support this we again need:
 
     export TF_VAR_network_remote_state=NETWORK_S3_BUCKET

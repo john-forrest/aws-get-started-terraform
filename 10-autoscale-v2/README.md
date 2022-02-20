@@ -21,3 +21,10 @@ the region that module was built with)
 To initialise:
 
     terraform init -backend-config="profile=app" -backend-config="bucket=${TF_VAR_applications_remote_state}" -backend-config="region=${TF_VAR_remote_state_region}" -backend-config="dynamodb_table=pizza-app-tfstatelock-${TF_VAR_applications_remote_state#pizza-app-tfstate-}"
+
+Note: I've added an extra input varioable "ami-id", which will override the use
+of the ami from "create-ami" if you need to. This is not the usual usecase, but
+if needs the use would typically be something like:
+
+    terraform plan -out temp.tfplan -var ami-id=ami-0a4a283f74c81fdd3
+
