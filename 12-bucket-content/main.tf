@@ -91,14 +91,14 @@ data "aws_s3_bucket_object" "common_tags" {
 ##################################################################################
 
 locals {
-  content_bucket = data.terraform_remote_state.content-bucket.outputs.bucket
+  content_bucket      = data.terraform_remote_state.content-bucket.outputs.bucket
   content_bucket_name = data.terraform_remote_state.content-bucket.outputs.bucket_name
 
-  imported_app_config       = jsondecode(data.aws_s3_bucket_object.app_config.body)
-  imported_common_tags      = data.aws_s3_bucket_object.common_tags.body
-  imported_basename         = local.imported_app_config.basename
+  imported_app_config  = jsondecode(data.aws_s3_bucket_object.app_config.body)
+  imported_common_tags = data.aws_s3_bucket_object.common_tags.body
+  imported_basename    = local.imported_app_config.basename
 
-  basename         = (var.basename != "") ? var.basename : local.imported_basename
+  basename = (var.basename != "") ? var.basename : local.imported_basename
 
   common_tags = merge(jsondecode(local.imported_common_tags), {
     module = "bucket-content"
@@ -111,19 +111,19 @@ locals {
 
 
 resource "aws_s3_bucket_object" "config_content" {
-  for_each     = fileset("content/", "**")
-  bucket       = local.content_bucket
-  key          = each.value
-  source       = "./content/${each.value}"
+  for_each = fileset("content/", "**")
+  bucket   = local.content_bucket
+  key      = each.value
+  source   = "./content/${each.value}"
   # work out mimetype by matching suffix
-  content_type = ((substr(each.value, -4, -1) == ".png") ? "image/png" : 
-                  (substr(each.value, -3, -1) == ".js") ? "text/javascript" :
-                  (substr(each.value, -5, -1) == ".json") ? "application/json" :
-                  (substr(each.value, -4, -1) == ".css") ? "text/css" :
-                  (each.value == "favicon.ico") ? "image/x-image" : # favicons are special cases
-                  (substr(each.value, -4, -1) == ".ico") ? "image/vnd.microsoft.icon" :
-                  "binary/octet-stream")
-  etag         = filemd5("./content/${each.value}") # will trigger new version if content update
+  content_type = ((substr(each.value, -4, -1) == ".png") ? "image/png" :
+    (substr(each.value, -3, -1) == ".js") ? "text/javascript" :
+    (substr(each.value, -5, -1) == ".json") ? "application/json" :
+    (substr(each.value, -4, -1) == ".css") ? "text/css" :
+    (each.value == "favicon.ico") ? "image/x-image" : # favicons are special cases
+    (substr(each.value, -4, -1) == ".ico") ? "image/vnd.microsoft.icon" :
+  "binary/octet-stream")
+  etag = filemd5("./content/${each.value}") # will trigger new version if content update
 
   tags = merge(local.common_tags, {
     Name = "${local.content_bucket_name}-content-${each.value}"

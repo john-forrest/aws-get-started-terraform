@@ -163,11 +163,11 @@ data "aws_s3_bucket_object" "common_tags" {
 #############################################################################
 
 locals {
-  public_subnets    = data.terraform_remote_state.setup_vpc.outputs.public_subnets
-  pizza-ec2-sg-id   = data.terraform_remote_state.pizza-og.outputs.ec2-sg-id
-  target_group_arns = data.terraform_remote_state.load-balancer.outputs.pizza-loader-tg-arns
+  public_subnets              = data.terraform_remote_state.setup_vpc.outputs.public_subnets
+  pizza-ec2-sg-id             = data.terraform_remote_state.pizza-og.outputs.ec2-sg-id
+  target_group_arns           = data.terraform_remote_state.load-balancer.outputs.pizza-loader-tg-arns
   pizza-ec2-role-profile-name = data.terraform_remote_state.ec2-role.outputs.pizza-ec2-role-profile-name
-  pizza-ec2-role-profile-arn = data.terraform_remote_state.ec2-role.outputs.pizza-ec2-role-profile-arn
+  pizza-ec2-role-profile-arn  = data.terraform_remote_state.ec2-role.outputs.pizza-ec2-role-profile-arn
 
   imported-image-id         = data.terraform_remote_state.pizza-ami.outputs.pizza-image-id
   imported_app_config       = jsondecode(data.aws_s3_bucket_object.app_config.body)

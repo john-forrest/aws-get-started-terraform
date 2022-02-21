@@ -106,11 +106,17 @@ for autoscaler to be plugged in.
 - 8-autoscale - Autoscaler demo
 - 9-pizza-app-config-v2 - updated application config with autoscaler parameters added.
 - 10-autoscale-v2 - updated autoscale config that users application config.json
+- 11-create-bucket - Create bucket for pizza-luvrs
+- 12-bucket-content - add assets to bucket using tensorflow (alternative to video)
+- 13-ec2-role - first part of "Having All the Things in S3"
+- 14-create-ec2-instance-v2 - bonus step: add role to pizza-og for testing
+- 15-create-ami-v2 - create "pizza-plus-s3" ami
+- 16-autoscale-v3 - final part of "Having All the Things in S3"
 
 ## Notes
 
 - During the development of this, the latest version of the AWS resources
-went from v3.x to v4.x with somewhat different parameters. I have kept this
+went from v3.x to v4.x with somewhat different parameters in places. I have kept this
 so far on v3.x. The following is useful in trying to look at the appropriate
 [documenttion](https://registry.terraform.io/providers/hashicorp/aws/3.74.2/docs)
 - by default, the terraform documentation just shows the latest.

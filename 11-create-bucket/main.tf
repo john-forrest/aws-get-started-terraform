@@ -79,13 +79,13 @@ data "aws_s3_bucket_object" "common_tags" {
 #############################################################################
 
 locals {
-  imported_app_config       = jsondecode(data.aws_s3_bucket_object.app_config.body)
-  imported_common_tags      = data.aws_s3_bucket_object.common_tags.body
-  imported_basename         = local.imported_app_config.basename
+  imported_app_config  = jsondecode(data.aws_s3_bucket_object.app_config.body)
+  imported_common_tags = data.aws_s3_bucket_object.common_tags.body
+  imported_basename    = local.imported_app_config.basename
 
-  basename         = (var.basename != "") ? var.basename : local.imported_basename
+  basename = (var.basename != "") ? var.basename : local.imported_basename
 
-  bucket_name_prefix     = "${local.basename}-luvrs"
+  bucket_name_prefix = "${local.basename}-luvrs"
 
   common_tags = merge(jsondecode(local.imported_common_tags), {
     module = "create-bucket"
@@ -109,7 +109,7 @@ resource "aws_s3_bucket" "pizza-luvrs" {
   bucket        = local.bucket_name
   acl           = "public-read"
   force_destroy = true
-  
+
   # allow public read access to objects
   policy = <<EOF
   {
@@ -138,8 +138,8 @@ EOF
   }
 
   tags = merge(local.common_tags,
-           {name = local.bucket_name
-		 })
+    { name = local.bucket_name
+  })
 }
 
 #############################################################################

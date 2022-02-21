@@ -157,7 +157,7 @@ locals {
 
   pizza-ec2-sg     = data.terraform_remote_state.create-security-groups.outputs.ec2-sg-id
   pizza-ec2-ssh-sg = data.terraform_remote_state.create-security-groups.outputs.ec2-ssh-id
-  
+
   pizza-ec2-role-profile-name = data.terraform_remote_state.ec2-role.outputs.pizza-ec2-role-profile-name
 
   imported_app_config  = jsondecode(data.aws_s3_bucket_object.app_config.body)

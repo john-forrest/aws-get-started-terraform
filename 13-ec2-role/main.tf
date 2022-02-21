@@ -89,15 +89,15 @@ data "aws_s3_bucket_object" "common_tags" {
 #############################################################################
 
 locals {
-  imported_app_config       = jsondecode(data.aws_s3_bucket_object.app_config.body)
-  imported_common_tags      = data.aws_s3_bucket_object.common_tags.body
-  imported_basename         = local.imported_app_config.basename
-  imported_policy           = data.aws_iam_policy.AmazonS3FullAccess.policy
-  
+  imported_app_config  = jsondecode(data.aws_s3_bucket_object.app_config.body)
+  imported_common_tags = data.aws_s3_bucket_object.common_tags.body
+  imported_basename    = local.imported_app_config.basename
+  imported_policy      = data.aws_iam_policy.AmazonS3FullAccess.policy
+
   managed_policy_arns = [data.aws_iam_policy.AmazonS3FullAccess.arn]
-  
-  basename         = (var.basename != "") ? var.basename : local.imported_basename
-  role_name        = (var.role_name != "") ? var.role_name : "${local.basename}-ec2-role"
+
+  basename  = (var.basename != "") ? var.basename : local.imported_basename
+  role_name = (var.role_name != "") ? var.role_name : "${local.basename}-ec2-role"
 
   common_tags = merge(jsondecode(local.imported_common_tags), {
     module = "ec2-role"
@@ -109,9 +109,9 @@ locals {
 #############################################################################
 
 resource "aws_iam_role" "pizza-ec2-role" {
-  name                = local.role_name
+  name = local.role_name
   # default role policy
-  assume_role_policy  = <<EOF
+  assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -127,7 +127,7 @@ resource "aws_iam_role" "pizza-ec2-role" {
 EOF
 
   managed_policy_arns = local.managed_policy_arns
-  
+
   tags = merge(local.common_tags, {
     Name = local.role_name
   })
