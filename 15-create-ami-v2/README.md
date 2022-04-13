@@ -22,9 +22,8 @@ meantime. (Although changing the name would be seen as an update). To get a new
 AMI you need to use either "terraform taint" or "terraform destroy".
 - Even using "terraform taint" will lead to the existing AMI being destroyed when we
 create a new one. There is no inherrent versioning system for this in either aws, terraform
-or the aws provider - there have been [proposals on the subject]
-(https://github.com/hashicorp/terraform/issues/15672), but not seemingly for the real
-requirement to create versioning.
+or the aws provider - there have been [proposals on the subject](https://github.com/hashicorp/terraform/issues/15672),
+but not seemingly for the real requirement to create versioning.
 
 The suggested approach is that, if the existing AMI is yet to be used or, for whatever
 reason you don't want to keep it, you call:
@@ -36,9 +35,9 @@ call:
 
     terraform state rm aws_ami_from_instance.pizza-image
 
-Both to be called before calling "terraform plan". Note that the latter is not idea -
-it orphans the AMIs so that they are no longer tidied up by "terraform destroy", but
-that seems the best thing to do.
+Both to be called before calling "terraform plan". Note that the latter is not ideal -
+it orphans the AMIs so that they are no longer tidied up by "terraform destroy" - but
+that seems the best thing to do in that circumstance.
 
 To support this we again need:
 

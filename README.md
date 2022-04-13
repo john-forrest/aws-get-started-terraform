@@ -1,7 +1,7 @@
 # aws-get-started-terraform
 
-Redo some of the examples from pluralsight course [AWS Developer Getting Started)
-[https://app.pluralsight.com/library/courses/aws-developer-getting-started/table-of-contents]
+Redo some of the examples from pluralsight course [AWS Developer Getting Started]
+(https://app.pluralsight.com/library/courses/aws-developer-getting-started/table-of-contents)
 but using terraform. It is not designed to be used on its own - the assumption is that
 you will have subscribed to this course.
 
@@ -22,8 +22,8 @@ it can be mined for "how to" approaches, but no warranty as to suitability is gi
 to the material in the comments.
 
 Having said that, the comments include summaries of the verbal instuctions from the
-[AWS Developer Getting Started)
-[https://app.pluralsight.com/library/courses/aws-developer-getting-started/table-of-contents]
+[AWS Developer Getting Started]
+(https://app.pluralsight.com/library/courses/aws-developer-getting-started/table-of-contents)
 course itself. The original material will be under copyright as such,
 but the assumption that this amounts to fair use. Whatever, I would encourage you
 to subscribe to the course.
@@ -77,7 +77,7 @@ near in terraform. They don't aim to be exact, just near enough. They use what
 the author of the Terraform courses, mentioned above, refers to as a "layered
 approach" - rather than a single project that build everything, several
 Terraform configs generate the various resources on AWS, so can be separately
-build and replaced. 
+built and replaced.
 
 Also note the various demos use a trick - rather than modify the original
 files, you can have a new version of a configuration in a second directory

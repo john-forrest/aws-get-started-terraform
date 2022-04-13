@@ -35,6 +35,5 @@ To initialise:
 
     terraform init -backend-config="profile=app" -backend-config="bucket=${TF_VAR_applications_remote_state}" -backend-config="region=${TF_VAR_remote_state_region}" -backend-config="dynamodb_table=pizza-app-tfstatelock-${TF_VAR_applications_remote_state#pizza-app-tfstate-}"
 
-Note how to use the created role is not obvious. A useful note on how to do that given [here]
-(https://skundunotes.com/2021/11/16/attach-iam-role-to-aws-ec2-instance-using-terraform/)
+Note how to use the created role is not obvious. A useful note on how to do that given [here](https://skundunotes.com/2021/11/16/attach-iam-role-to-aws-ec2-instance-using-terraform)
 

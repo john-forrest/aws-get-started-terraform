@@ -52,7 +52,7 @@ To implement this in terraform we have some basic options:
 
 Given this is expected to be of practical use, it would seem to be better to take approach (3)
 and use the [semi-official alb module](https://registry.terraform.io/modules/terraform-aws-modules/alb/aws/latest).
-Similarly rather than build the security group(s) up from scratch, it might bee seen to use
+Similarly rather than build the security group(s) up from scratch, it might be preferable to use
 the [semi-official security group module](https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/latest),
 whose usage seems to be closer to that of the web pages then the resources themselves.
 The documentation for the alb module is not totally clear in parts, but it seems that
