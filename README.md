@@ -22,8 +22,7 @@ it can be mined for "how to" approaches, but no warranty as to suitability is gi
 to the material in the comments.
 
 Having said that, the comments include summaries of the verbal instuctions from the
-[AWS Developer Getting Started]
-(https://app.pluralsight.com/library/courses/aws-developer-getting-started/table-of-contents)
+[AWS Developer Getting Started](https://app.pluralsight.com/library/courses/aws-developer-getting-started/table-of-contents)
 course itself. The original material will be under copyright as such,
 but the assumption that this amounts to fair use. Whatever, I would encourage you
 to subscribe to the course.
