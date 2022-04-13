@@ -1,7 +1,7 @@
 # aws-get-started-terraform
 
-Redo some of the examples from pluralsight course [AWS Developer Getting Started]
-(https://app.pluralsight.com/library/courses/aws-developer-getting-started/table-of-contents)
+Redo some of the examples from pluralsight course
+[AWS Developer Getting Started](https://app.pluralsight.com/library/courses/aws-developer-getting-started/table-of-contents)
 but using terraform. It is not designed to be used on its own - the assumption is that
 you will have subscribed to this course.
 
@@ -118,5 +118,5 @@ for autoscaler to be plugged in.
 - During the development of this, the latest version of the AWS resources
 went from v3.x to v4.x with somewhat different parameters in places. I have kept this
 so far on v3.x. The following is useful in trying to look at the appropriate
-[documenttion](https://registry.terraform.io/providers/hashicorp/aws/3.74.2/docs)
+[documentation](https://registry.terraform.io/providers/hashicorp/aws/3.74.2/docs)
 - by default, the terraform documentation just shows the latest.
